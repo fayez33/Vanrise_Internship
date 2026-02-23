@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="deviceApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Vanrise Reservations</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --jet-black: #0B0B0B;
+            --silver: #C0C0C0;
+            --white: #FFFFFF;
+            --coral: #FF6F61;
+            --blueslate: #6B7F8C;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--jet-black);
+            font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+            padding-top: 64px;
+        }
+
+        .navbar-default {
+            background: transparent;
+            border: none;
+            padding: 14px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+            .navbar-default .navbar-brand {
+                color: var(--jet-black);
+                font-weight: 700;
+                font-size: 18px;
+            }
+
+            .navbar-default .navbar-nav > li > a {
+                color: var(--jet-black);
+                padding: 10px 14px;
+                font-weight: 600;
+            }
+
+            .navbar-default .navbar-nav > li.active > a {
+                color: var(--blueslate);
+                border-bottom: 3px solid var(--coral);
+                padding-bottom: 8px;
+            }
+
+        .page-card {
+            background: var(--white);
+            border: 1px solid var(--silver);
+            padding: 28px;
+            border-radius: 8px;
+            max-width: 1100px;
+            margin: 0 auto;
+            box-shadow: 0 6px 18px rgba(11,11,11,0.04);
+        }
+
+        .page-title {
+            color: var(--jet-black);
+            font-weight: 700;
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+            .search-bar .form-control {
+                height: 40px;
+                border: 1px solid var(--silver);
+                border-radius: 6px;
+            }
+
+        .btn-custom {
+            background: var(--coral);
+            color: var(--white);
+            border: none;
+            height: 40px;
+            padding: 0 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+            .table th {
+                text-align: left;
+                padding: 12px 8px;
+                border-bottom: 2px solid var(--silver);
+                font-weight: 700;
+            }
+
+            .table td {
+                padding: 12px 8px;
+                border-top: 1px solid #F4F2F1;
+            }
+    </style>
+</head>
+<body ng-controller="ReservationController">
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="Index.html">Vanrise Device Manager</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Devices</a></li>
+                <li><a href="Clients.html">Clients</a></li>
+                <li><a href="PhoneNumbers.html">Phone Numbers</a></li>
+                <li class="active"><a href="Reservations.html">Reservations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-card">
+        <h2 class="page-title">Phone Number Reservations</h2>
+
+        <div class="search-bar">
+            <select class="form-control" ng-model="searchClient" style="width:250px;">
+                <option value="">All Clients</option>
+                <option ng-repeat="c in clients" ng-value="c.ID">{{c.Name}}</option>
+            </select>
+            <select class="form-control" ng-model="searchPhone" style="width:250px;">
+                <option value="">All Numbers</option>
+                <option ng-repeat="p in phones" ng-value="p.ID">{{p.Number}}</option>
+            </select>
+            <button class="btn btn-custom" ng-click="search()">Search</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client</th>
+                    <th>Phone Number</th>
+                    <th>Begin Date (BED)</th>
+                    <th>End Date (EED)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="r in reservations">
+                    <td>{{r.ID}}</td>
+                    <td>{{r.ClientName}}</td>
+                    <td>{{r.PhoneNumber}}</td>
+                    <td>{{r.BED | date : 'yyyy-MM-dd'}}</td>
+                    <td>{{r.EED ? (r.EED | date : 'yyyy-MM-dd') : '---'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+
+    <script>
+        var app = angular.module('deviceApp', ['ui.bootstrap']);
+
+        app.controller('ReservationController', function($scope, $http){
+            // Load data for selectors
+            $scope.init = function() {
+                $http.get('/api/Clients/GetAll').then(function(res){ $scope.clients = res.data; });
+                $http.get('/api/PhoneNumbers/GetAll').then(function(res){ $scope.phones = res.data; });
+                $scope.loadReservations();
+            };
+
+            $scope.loadReservations = function(){
+                $http.get('/api/Reservations/GetAll').then(function(res){ $scope.reservations = res.data; });
+            };
+
+            $scope.search = function(){
+                var params = {
+                    clientId: $scope.searchClient || null,
+                    phoneNumberId: $scope.searchPhone || null
+                };
+                $http.get('/api/Reservations/Search', { params: params }).then(function(res){
+                    $scope.reservations = res.data;
+                });
+            };
+
+            $scope.init();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var path = window.location.pathname.split('/').pop() || 'Reservations.html';
+                var links = document.querySelectorAll('.nav.navbar-nav li a');
+                links.forEach(function (a) {
+                    var href = a.getAttribute('href');
+                    if (!href) return;
+                    if (href.split('/').pop() === path) {
+                        a.parentElement.classList.add('active');
+                    } else {
+                        a.parentElement.classList.remove('active');
+                    }
+                });
+            } catch (e) { }
+        });
+    </script>
+</body>
+</html>

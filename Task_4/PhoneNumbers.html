@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="deviceApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Vanrise Phone Numbers</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{ --jet-black:#0B0B0B; --silver:#C0C0C0; --white:#FFFFFF; --coral:#FF6F61; --blueslate:#6B7F8C; }
+        body{ background:var(--white); color:var(--jet-black); font-family:"Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial; padding-top:64px; }
+        .navbar-default{ background:transparent; border:none; padding:14px 20px; position: fixed; top:0; left:0; right:0; width:100%; z-index:1000; }
+        .navbar-default .navbar-brand{ color:var(--jet-black); font-weight:700; font-size:18px; }
+        .navbar-default .navbar-nav>li>a{ color:var(--jet-black); padding:10px 14px; font-weight:600; }
+        .navbar-default .navbar-nav>li.active>a{ color:var(--blueslate); border-bottom:3px solid var(--coral); padding-bottom:8px; }
+        .page-card{ background:var(--white); border:1px solid var(--silver); padding:28px; border-radius:8px; max-width:980px; margin:0 auto; box-shadow:0 6px 18px rgba(11,11,11,0.04); }
+        .page-title{ color:var(--jet-black); font-weight:700; margin-bottom:18px; font-size:20px; text-align:left; }
+        .search-bar{ display:flex; gap:12px; align-items:center; margin-bottom:16px; }
+        .search-bar .form-control{ height:40px; border:1px solid var(--silver); background:var(--white); color:var(--jet-black); border-radius:6px; }
+        .btn-custom{ background:var(--coral); color:var(--white); border:none; height:40px; padding:0 16px; border-radius:6px; font-weight:600; }
+        .btn-custom.secondary{ background:var(--blueslate); color:var(--white); }
+        .btn-default.btn-sm{ background:transparent; color:var(--jet-black); border:1px solid var(--silver); border-radius:6px; padding:4px 8px; }
+        .table{ width:100%; border-collapse:collapse; margin-top:8px; }
+        .table th{ text-align:left; padding:12px 8px; color:var(--jet-black); border-bottom:2px solid var(--silver); font-weight:700; }
+        .table td{ padding:12px 8px; border-top:1px solid #F4F2F1; color:var(--jet-black); }
+        .modal-content{ border:1px solid var(--silver); border-radius:8px; padding:12px; }
+        .modal-header .modal-title{ color:var(--jet-black); font-weight:700; }
+        .form-control{ background:var(--white); color:var(--jet-black); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="Index.html">Vanrise Device Manager</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Devices</a></li>
+                <li><a href="Clients.html">Clients</a></li>
+                <li><a href="PhoneNumbers.html">Phone Numbers</a></li>
+                <li><a href="Reservations.html">Reservations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-card" ng-controller="PhoneController">
+        <h2 class="page-title">Phone Numbers</h2>
+
+        <div class="search-bar">
+            <input type="text" class="form-control" placeholder="Search number..." ng-model="searchNumber" style="width:260px;">
+            <select class="form-control" ng-model="searchDevice" style="width:260px;">
+                <option value="">All Devices</option>
+                <option ng-repeat="d in devices" ng-value="d.ID">{{d.Name}}</option>
+            </select>
+            <button class="btn btn-custom" ng-click="search()">Search</button>
+            <button class="btn btn-custom" ng-click="openModal()">Add New</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Number</th>
+                    <th>Device</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="p in phones">
+                    <td>{{p.ID}}</td>
+                    <td>{{p.Number}}</td>
+                    <td>{{p.DeviceName}}</td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="openModal(p)">Edit</button>
+                        <button class="btn btn-default btn-sm" style="color:#d9534f;" ng-click="deletePhone(p.ID)">Delete</button>
+                        <button class="btn btn-default btn-sm" ng-click="openReservationModal(p)" style="margin-left:6px;">Reserve</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/ng-template" id="reservationModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{title}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Client</label>
+                <select class="form-control" ng-model="reservation.ClientID">
+                    <option ng-repeat="c in clients" ng-value="c.ID">{{c.Name}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" class="form-control" ng-model="reservation.PhoneNumber" ng-disabled="true">
+            </div>
+            <div class="form-group">
+                <label>Begin Date</label>
+                <input type="date" class="form-control" ng-model="reservation.BED">
+            </div>
+            <div class="form-group">
+                <label>End Date (optional)</label>
+                <input type="date" class="form-control" ng-model="reservation.EED">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-custom" ng-click="save()">Reserve</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="phoneModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{title}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Number</label>
+                <input type="text" class="form-control" ng-model="phoneData.Number" placeholder="Phone Number">
+            </div>
+            <div class="form-group">
+                <label>Device</label>
+                <select class="form-control" ng-model="phoneData.DeviceID">
+                    <option ng-repeat="d in devices" ng-value="d.ID">{{d.Name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-custom" ng-click="save()">Save</button>
+        </div>
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+
+    <script>
+        var app = angular.module('deviceApp', ['ui.bootstrap']);
+
+        app.controller('PhoneController', function($scope, $http, $uibModal){
+            $scope.loadDevices = function(){
+                $http.get('/api/Devices/GetAll').then(function(res){ $scope.devices = res.data; });
+            };
+
+            $scope.loadPhones = function(){
+                $http.get('/api/PhoneNumbers/GetAll').then(function(res){ $scope.phones = res.data; });
+            };
+
+            $scope.search = function(){
+                var deviceParam = ($scope.searchDevice === '' || typeof $scope.searchDevice === 'undefined') ? null : parseInt($scope.searchDevice);
+                if((!$scope.searchNumber || $scope.searchNumber==='') && deviceParam===null){
+                    $scope.loadPhones();
+                } else {
+                    $http.get('/api/PhoneNumbers/Search', { params: { number: $scope.searchNumber, deviceId: deviceParam } }).then(function(res){ $scope.phones = res.data; });
+                }
+            };
+
+            $scope.openModal = function(phoneToEdit){
+                var modal = $uibModal.open({ templateUrl: 'phoneModal.html', controller: 'ModalPhoneCtrl', resolve: { item: function(){ return phoneToEdit ? angular.copy(phoneToEdit) : null; }, devices: function(){ return $scope.devices; } } });
+                modal.result.then(function(result){
+                    if(result.ID){ $http.post('/api/PhoneNumbers/Update', result).then(function(){ $scope.search(); }); }
+                    else { $http.post('/api/PhoneNumbers/Add', result).then(function(){ $scope.search(); }); }
+                });
+            };
+
+            $scope.loadDevices();
+            $scope.loadPhones();
+            // Load clients for reservation creation
+            $http.get('/api/Clients/GetAll').then(function(res){ $scope.clients = res.data; });
+
+            $scope.deletePhone = function(id){
+                if(!confirm('Delete this phone number?')) return;
+                $http({ method: 'DELETE', url: '/api/PhoneNumbers/Delete', params: { id: id } })
+                    .then(function(){ $scope.search(); })
+                    .catch(function(err){ alert('Delete failed: ' + (err.data || '')); });
+            };
+
+            $scope.openReservationModal = function(phone){
+                var modal = $uibModal.open({ templateUrl: 'reservationModal.html', controller: 'ModalReservationCtrl', resolve: { phone: function(){ return phone; }, clients: function(){ return $scope.clients; } } });
+                modal.result.then(function(res){
+                    $http.post('/api/Reservations/Add', res).then(function(){ alert('Reserved'); });
+                });
+            };
+        });
+
+        app.controller('ModalPhoneCtrl', function($scope, $uibModalInstance, item, devices){
+            $scope.title = item ? 'Edit Phone' : 'Add Phone';
+            $scope.devices = devices || [];
+            $scope.phoneData = item || { Number: '', DeviceID: ($scope.devices[0] ? $scope.devices[0].ID : null) };
+
+            $scope.save = function(){ $uibModalInstance.close($scope.phoneData); };
+            $scope.cancel = function(){ $uibModalInstance.dismiss('cancel'); };
+        });
+
+        app.controller('ModalReservationCtrl', function($scope, $uibModalInstance, phone, clients){
+            $scope.title = 'Reserve Number';
+            $scope.clients = clients || [];
+            $scope.reservation = { PhoneNumberID: phone.ID, PhoneNumber: phone.Number, ClientID: (clients[0] ? clients[0].ID : null), BED: new Date() };
+
+            $scope.save = function(){
+                // Convert dates to ISO without time for server
+                var res = {
+                    ClientID: $scope.reservation.ClientID,
+                    PhoneNumberID: $scope.reservation.PhoneNumberID,
+                    BED: $scope.reservation.BED,
+                    EED: $scope.reservation.EED || null
+                };
+                $uibModalInstance.close(res);
+            };
+            $scope.cancel = function(){ $uibModalInstance.dismiss('cancel'); };
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var path = window.location.pathname.split('/').pop() || 'PhoneNumbers.html';
+                var links = document.querySelectorAll('.nav.navbar-nav li a');
+                links.forEach(function (a) {
+                    var href = a.getAttribute('href');
+                    if (!href) return;
+                    if (href.split('/').pop() === path) {
+                        a.parentElement.classList.add('active');
+                    } else {
+                        a.parentElement.classList.remove('active');
+                    }
+                });
+            } catch (e) { }
+        });
+    </script>
+</body>
+</html>
