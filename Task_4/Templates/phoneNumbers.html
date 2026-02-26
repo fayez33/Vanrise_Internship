@@ -1,0 +1,40 @@
+﻿<div class="container-fluid" ng-controller="phoneNumbersController" ng-init="loadPhoneNumbers()">
+    <h2 style="margin-bottom: 20px;">Phone Numbers Management</h2>
+
+    <div class="form-inline" style="margin-bottom: 15px;">
+        <input type="text" class="form-control" ng-model="searchNumber" placeholder="Search by number..." style="width: 200px;" />
+
+        <device-selector selected-id="searchDevice" style="margin-left: 10px; margin-right: 10px;"></device-selector>
+
+        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()">Add Phone Number</button>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Phone Number</th>
+                <th>Device</th>
+                <th style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in phoneNumbers">
+                <td style="vertical-align: middle;">{{p.ID}}</td>
+                <td style="vertical-align: middle;">{{p.Number}}</td>
+                <td style="vertical-align: middle;">{{p.DeviceName}}</td>
+                <td style="width: 200px;">
+                    <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(p)">
+                            <i class="glyphicon glyphicon-edit"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(p.ID)">
+                            <i class="glyphicon glyphicon-trash"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

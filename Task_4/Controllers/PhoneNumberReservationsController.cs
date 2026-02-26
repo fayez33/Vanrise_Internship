@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using Task_4.Models;
+using Task_4.Models.Task_4.Models;
 using HttpDeleteAttribute = System.Web.Http.HttpDeleteAttribute;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
@@ -74,25 +75,20 @@ namespace Task_4.Controllers
             }
             return Ok(list);
         }
-
         [HttpPost]
-        [Route("api/Reservations/Add")]
-        public IHttpActionResult Add(PhoneNumberReservation reservation)
+        [Route("api/Reservations/Reserve")]
+        public IHttpActionResult Reserve(ReservePhoneNumberRequest request)
         {
-            if (reservation == null) return BadRequest("Invalid reservation data.");
+            if (request == null) return BadRequest("Invalid request.");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
-                SqlCommand cmd = new SqlCommand("sp_AddReservation", conn);
+                SqlCommand cmd = new SqlCommand("sp_ReservePhoneNumber", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@ClientID", reservation.ClientID);
-                cmd.Parameters.AddWithValue("@PhoneNumberID", reservation.PhoneNumberID);
-                cmd.Parameters.AddWithValue("@BED", reservation.BED);
-                if (reservation.EED.HasValue)
-                    cmd.Parameters.AddWithValue("@EED", reservation.EED.Value);
-                else
-                    cmd.Parameters.AddWithValue("@EED", DBNull.Value);
+                cmd.Parameters.AddWithValue("@ClientID", request.ClientID);
+                cmd.Parameters.AddWithValue("@PhoneNumberID", request.PhoneNumberID);
+                cmd.Parameters.AddWithValue("@BED", DateTime.Now);
 
                 try
                 {
@@ -104,7 +100,36 @@ namespace Task_4.Controllers
                     return InternalServerError(ex);
                 }
             }
-            return Ok(reservation);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/Reservations/Unreserve")]
+        public IHttpActionResult Unreserve(UnreservePhoneNumberRequest request)
+        {
+            if (request == null) return BadRequest("Invalid request.");
+
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                SqlCommand cmd = new SqlCommand("sp_UnreservePhoneNumber", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ClientID", request.ClientID);
+                cmd.Parameters.AddWithValue("@PhoneNumberID", request.PhoneNumberID);
+                cmd.Parameters.AddWithValue("@EED", DateTime.Now);
+
+                try
+                {
+                    conn.Open();
+                    int rows = cmd.ExecuteNonQuery();
+                    if (rows == 0) return NotFound(); // No active reservation found to unreserve
+                }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            }
+            return Ok();
         }
     }
 }

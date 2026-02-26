@@ -1,0 +1,29 @@
+﻿<div class="container-fluid" ng-controller="reportsController" ng-init="loadClientsReport()">
+    <h2 style="margin-bottom: 20px;">Clients Per Type Report</h2>
+
+    <div class="form-inline" style="margin-bottom: 15px;">
+        <label style="margin-right: 10px;">Filter by Type:</label>
+        <!-- Reusing your custom directive -->
+        <client-type-selector selected-type="filterType" style="margin-right: 10px;"></client-type-selector>
+
+        <button type="button" class="btn btn-primary" ng-click="loadClientsReport()">Search / Filter</button>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover" style="max-width: 600px;">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>No of Clients</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="r in clientsReport">
+                <!-- Check if 0 or 1 to print the Enum text properly -->
+                <td style="vertical-align: middle; font-weight: bold;">
+                    {{ r.Type === 0 ? 'Individual' : 'Organization' }}
+                </td>
+                <td style="vertical-align: middle;">{{ r.NoOfClients }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

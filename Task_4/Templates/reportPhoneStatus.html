@@ -1,0 +1,39 @@
+﻿<div class="container-fluid" ng-controller="reportsController" ng-init="loadPhoneReport()">
+    <h2 style="margin-bottom: 20px;">Phone Numbers Status Per Device</h2>
+
+    <div class="form-inline" style="margin-bottom: 15px;">
+        <label style="margin-right: 10px;">Filter by Device:</label>
+        <device-selector selected-id="filterDevice" style="margin-right: 15px;"></device-selector>
+
+        <label style="margin-right: 10px;">Filter by Status:</label>
+        <select class="form-control" ng-model="filterStatus" style="margin-right: 15px;">
+            <option value="">-- All Statuses --</option>
+            <option value="1">Reserved</option>
+            <option value="0">Unreserved</option>
+        </select>
+
+        <button type="button" class="btn btn-primary" ng-click="loadPhoneReport()">Search / Filter</button>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover" style="max-width: 800px;">
+        <thead>
+            <tr>
+                <th>Device</th>
+                <th>Phone Numbers Status</th>
+                <th># of Phone Numbers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in phoneReport">
+                <td style="vertical-align: middle;">{{ p.Device }}</td>
+                <td style="vertical-align: middle;">
+                    <!-- Added a nice visual badge depending on the status -->
+                    <span ng-class="{'label label-success': p.Status === 'Reserved', 'label label-default': p.Status === 'Unreserved'}">
+                        {{ p.Status }}
+                    </span>
+                </td>
+                <td style="vertical-align: middle; font-weight: bold;">{{ p.NoOfPhoneNumbers }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -171,5 +171,33 @@ namespace Task_4.Controllers
             }
             return Ok(phone);
         }
+        [HttpGet]
+        [Route("api/PhoneNumbers/GetActiveByClient")]
+        public IHttpActionResult GetActiveByClient(int clientId)
+        {
+            List<PhoneNumber> activeNumbers = new List<PhoneNumber>();
+
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                SqlCommand cmd = new SqlCommand("sp_GetActiveClientPhoneNumbers", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ClientID", clientId);
+
+                try
+                {
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        activeNumbers.Add(_phoneMapper(reader));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            }
+            return Ok(activeNumbers);
+        }
     }
 }

@@ -1,0 +1,11 @@
+﻿<div class="modal-header"><h3 class="modal-title">Unreserve Number for {{client.Name}}</h3></div>
+<div class="modal-body">
+    <div class="form-group">
+        <label>Select an Active Phone Number to Unreserve:</label>
+        <phone-number-selector selected-id="request.PhoneNumberID" client-id="client.ID"></phone-number-selector>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" ng-click="save()">Yes, Unreserve</button>
+    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

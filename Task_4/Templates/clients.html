@@ -1,0 +1,48 @@
+﻿<div class="container-fluid" ng-controller="clientsController" ng-init="loadClients()">
+    <h2 style="margin-bottom: 20px;">Clients Management</h2>
+
+    <div class="form-inline" style="margin-bottom: 15px;">
+        <input type="text" class="form-control" ng-model="searchName" placeholder="Search by name..." style="width: 200px;" />
+
+        <client-type-selector selected-type="searchType" style="margin-left: 10px; margin-right: 10px;"></client-type-selector>
+
+        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()">Add Client</button>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Birth Date</th>
+                <th style="width: 320px; text-align: center;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="c in clients">
+                <td style="vertical-align: middle;">{{c.ID}}</td>
+                <td style="vertical-align: middle;">{{c.Name}}</td>
+                <td style="vertical-align: middle;">{{ c.Type === 0 ? 'Individual' : 'Organization' }}</td>
+                <td style="vertical-align: middle;">{{ c.BirthDate ? (c.BirthDate | date:'yyyy-MM-dd') : 'N/A' }}</td>
+                <td style="width: 380px;">
+                    <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(c)">
+                            <i class="glyphicon glyphicon-edit"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="openReserveModal(c)">
+                            <i class="glyphicon glyphicon-phone"></i> Reserve
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="openUnreserveModal(c)">
+                            <i class="glyphicon glyphicon-ban-circle"></i> Unreserve
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(c.ID)">
+                            <i class="glyphicon glyphicon-trash"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

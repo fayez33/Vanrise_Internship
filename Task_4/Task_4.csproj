@@ -133,23 +133,31 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="ClientsController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhoneNumberReservationsController.cs" />
     <Compile Include="Controllers\PhoneNumbersController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientTypeReportDTO.cs" />
     <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\Filters.cs" />
     <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Models\PhoneNumberReservation.cs" />
+    <Compile Include="Models\PhoneStatusReportDTO.cs" />
+    <Compile Include="Models\Requests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\app\controllers\phoneNumberReservationsController.js" />
+    <Content Include="Scripts\app\controllers\reportsController.js" />
+    <Content Include="Scripts\app\directives\clientSelector.js" />
+    <Content Include="Scripts\app\directives\phoneNumberSelector.js" />
+    <Content Include="Templates\phoneNumberModal.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Clients.html" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -169,9 +177,13 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Index.html" />
-    <Content Include="PhoneNumbers.html" />
-    <Content Include="Reservations.html" />
+    <Content Include="Scripts\angular\angular.min.js" />
+    <Content Include="Scripts\angular\ui-bootstrap-tpls.min.js" />
+    <Content Include="Scripts\app\app.js" />
+    <Content Include="Scripts\app\controllers\clientsController.js" />
+    <Content Include="Scripts\app\controllers\devicesController.js" />
+    <Content Include="Scripts\app\controllers\phoneNumbersController.js" />
+    <Content Include="Scripts\app\services\apiService.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -179,6 +191,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
+    <Content Include="Scripts\app\directives\clientTypeSelector.js" />
+    <Content Include="Scripts\app\directives\deviceSelector.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
     <Content Include="Scripts\jquery-3.7.0.slim.js" />
@@ -189,6 +203,16 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Templates\clientModal.html" />
+    <Content Include="Templates\clients.html" />
+    <Content Include="Templates\deviceModal.html" />
+    <Content Include="Templates\devices.html" />
+    <Content Include="Templates\phoneNumberReservations.html" />
+    <Content Include="Templates\phoneNumbers.html" />
+    <Content Include="Templates\reportPhoneStatus.html" />
+    <Content Include="Templates\reserveModal.html" />
+    <Content Include="Templates\reportClientsPerType.html" />
+    <Content Include="Templates\unreserveModal.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -1,0 +1,35 @@
+﻿<div class="container-fluid" ng-controller="devicesController" ng-init="loadDevices()">
+    <h2 style="margin-bottom: 20px;">Devices Management</h2>
+
+    <div class="form-inline" style="margin-bottom: 15px;">
+        <input type="text" class="form-control" ng-model="searchText" placeholder="Search device name..." style="width: 250px;" />
+        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()">Add Device</button>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in devices">
+                <td style="vertical-align: middle;">{{d.ID}}</td>
+                <td style="vertical-align: middle;">{{d.Name}}</td>
+                <td style="width: 200px;">
+                    <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(d)">
+                            <i class="glyphicon glyphicon-edit"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(d.ID)">
+                            <i class="glyphicon glyphicon-trash"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
