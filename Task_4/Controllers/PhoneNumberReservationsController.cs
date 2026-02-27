@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Task_4.Models;
 using Task_4.Models.Task_4.Models;
+using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 using HttpDeleteAttribute = System.Web.Http.HttpDeleteAttribute;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
@@ -16,6 +17,7 @@ using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace Task_4.Controllers
 {
+    [Authorize]
     public class PhoneNumberReservationsController : ApiController
     {
         private string _connString = ConfigurationManager.ConnectionStrings["InternshipConn"].ConnectionString;
@@ -75,6 +77,7 @@ namespace Task_4.Controllers
             }
             return Ok(list);
         }
+
         [HttpPost]
         [Route("api/Reservations/Reserve")]
         public IHttpActionResult Reserve(ReservePhoneNumberRequest request)

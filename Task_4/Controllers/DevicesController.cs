@@ -7,8 +7,10 @@ using System.Web.Http;
 using System.Web.Services.Description;
 using Task_4.Models;
 
+
 namespace Task_4.Controllers
 {
+    [Authorize]
     public class DevicesController : ApiController
     {
         // 1. Connection String
@@ -78,6 +80,7 @@ namespace Task_4.Controllers
             return Ok(foundDevices);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("api/Devices/Add")]
         public IHttpActionResult Add(Device device)
@@ -105,6 +108,7 @@ namespace Task_4.Controllers
             return Ok(device);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("api/Devices/Update")]
         public IHttpActionResult Update(Device device)
@@ -133,6 +137,8 @@ namespace Task_4.Controllers
             }
             return Ok(device);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("api/Devices/Delete")]
         public IHttpActionResult Delete(int id)

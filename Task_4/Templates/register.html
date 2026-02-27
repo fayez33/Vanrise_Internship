@@ -1,0 +1,31 @@
+﻿<div class="container-fluid" ng-controller="registerController" style="display: flex; justify-content: center; margin-top: 100px;">
+    <div class="panel panel-default" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <div class="panel-heading" style="background-color: #f8f9fa;">
+            <h3 class="panel-title text-center" style="font-weight: bold;">Register New Account</h3>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger" ng-show="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-success" ng-show="successMessage">{{ successMessage }}</div>
+
+            <form ng-submit="register()">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" ng-model="newAccount.Username" required autofocus />
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" ng-model="newAccount.Password" required />
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password:</label>
+                    <input type="password" class="form-control" ng-model="newAccount.ConfirmPassword" required />
+                </div>
+                <button type="submit" class="btn btn-success btn-block" style="margin-top: 20px;" ng-disabled="isRegistering">
+                    {{ isRegistering ? 'Creating Account...' : 'Create Account' }}
+                </button>            </form>
+            <div class="text-center" style="margin-top: 15px;">
+                <a href="" ng-click="navigate('/Templates/login.html')">Already have an account? Log in here.</a>
+            </div>
+        </div>
+    </div>
+</div>

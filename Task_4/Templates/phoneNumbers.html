@@ -7,7 +7,7 @@
         <device-selector selected-id="searchDevice" style="margin-left: 10px; margin-right: 10px;"></device-selector>
 
         <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
-        <button type="button" class="btn btn-success" ng-click="openModal()">Add Phone Number</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()" ng-show="userRole === 'Admin'">Add Phone Number</button>
     </div>
 
     <table class="table table-bordered table-striped table-hover">
@@ -26,10 +26,10 @@
                 <td style="vertical-align: middle;">{{p.DeviceName}}</td>
                 <td style="width: 200px;">
                     <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(p)">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(p)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-edit"></i> Edit
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(p.ID)">
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(p.ID)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-trash"></i> Delete
                         </button>
                     </div>

@@ -4,7 +4,7 @@
     <div class="form-inline" style="margin-bottom: 15px;">
         <input type="text" class="form-control" ng-model="searchText" placeholder="Search device name..." style="width: 250px;" />
         <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
-        <button type="button" class="btn btn-success" ng-click="openModal()">Add Device</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()" ng-show="userRole === 'Admin'">Add Device</button>
     </div>
 
     <table class="table table-bordered table-striped table-hover">
@@ -21,10 +21,10 @@
                 <td style="vertical-align: middle;">{{d.Name}}</td>
                 <td style="width: 200px;">
                     <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(d)">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(d)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-edit"></i> Edit
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(d.ID)">
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(d.ID)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-trash"></i> Delete
                         </button>
                     </div>

@@ -8,8 +8,10 @@ using Task_4.Models;
 
 namespace Task_4.Controllers
 {
+    [Authorize]
     public class ClientsController : ApiController
     {
+
         private string _connString = ConfigurationManager.ConnectionStrings["InternshipConn"].ConnectionString;
 
         // Mapper for Clients
@@ -77,6 +79,7 @@ namespace Task_4.Controllers
             return Ok(foundClients);
         }
 
+        [Authorize(Roles = "Admin")] // Normal users will get a 401 Unauthorized here!
         [HttpPost]
         [Route("api/Clients/Add")]
         public IHttpActionResult Add(Client client)
@@ -115,6 +118,7 @@ namespace Task_4.Controllers
             return Ok(client);
         }
 
+        [Authorize(Roles = "Admin")] 
         [HttpPost]
         [Route("api/Clients/Update")]
         public IHttpActionResult Update(Client client)
@@ -153,6 +157,8 @@ namespace Task_4.Controllers
             }
             return Ok(client);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("api/Clients/Delete")]
         public IHttpActionResult Delete(int id)

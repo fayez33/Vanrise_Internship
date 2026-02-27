@@ -169,4 +169,11 @@ app.service('apiService', function ($http) {
         }
         return $http.get(url);
     };
+    // --- Phase 4: Authentication API Calls ---
+    this.login = function (credentials) {
+        return $http.post(baseUrl + 'Login/Authenticate', credentials);
+    };
+    this.register = function (credentials) {
+        return $http.post(baseUrl + 'Login/Register', credentials);
+    };
 });

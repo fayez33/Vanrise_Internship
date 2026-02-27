@@ -7,7 +7,7 @@
         <client-type-selector selected-type="searchType" style="margin-left: 10px; margin-right: 10px;"></client-type-selector>
 
         <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
-        <button type="button" class="btn btn-success" ng-click="openModal()">Add Client</button>
+        <button type="button" class="btn btn-success" ng-click="openModal()" ng-show="userRole === 'Admin'">Add Client</button>
     </div>
 
     <table class="table table-bordered table-striped table-hover">
@@ -28,7 +28,7 @@
                 <td style="vertical-align: middle;">{{ c.BirthDate ? (c.BirthDate | date:'yyyy-MM-dd') : 'N/A' }}</td>
                 <td style="width: 380px;">
                     <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(c)">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(c)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-edit"></i> Edit
                         </button>
                         <button type="button" class="btn btn-info btn-sm" ng-click="openReserveModal(c)">
@@ -37,7 +37,7 @@
                         <button type="button" class="btn btn-default btn-sm" ng-click="openUnreserveModal(c)">
                             <i class="glyphicon glyphicon-ban-circle"></i> Unreserve
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(c.ID)">
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(c.ID)" ng-show="userRole === 'Admin'">
                             <i class="glyphicon glyphicon-trash"></i> Delete
                         </button>
                     </div>

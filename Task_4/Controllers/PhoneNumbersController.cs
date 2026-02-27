@@ -17,6 +17,7 @@ using RoutePrefixAttribute = System.Web.Http.RoutePrefixAttribute;
 
 namespace Task_4.Controllers
 {
+    [System.Web.Http.Authorize]
     public class PhoneNumbersController : ApiController
     {
         // 1. Connection String from Web.config
@@ -91,7 +92,8 @@ namespace Task_4.Controllers
             return Ok(foundNumbers);
         }
 
-        [System.Web.Http.HttpPost]
+        [System.Web.Http.Authorize(Roles = "Admin")]
+        [HttpPost]
         [Route("api/PhoneNumbers/Add")]
         public IHttpActionResult Add(PhoneNumber phone)
         {
@@ -117,6 +119,8 @@ namespace Task_4.Controllers
             }
             return Ok(phone);
         }
+
+        [System.Web.Http.Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("api/PhoneNumbers/Delete")]
         public IHttpActionResult Delete(int id)
@@ -143,6 +147,7 @@ namespace Task_4.Controllers
             return Ok();
         }
 
+        [System.Web.Http.Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("api/PhoneNumbers/Update")]
         public IHttpActionResult Update(PhoneNumber phone)
@@ -171,6 +176,7 @@ namespace Task_4.Controllers
             }
             return Ok(phone);
         }
+
         [HttpGet]
         [Route("api/PhoneNumbers/GetActiveByClient")]
         public IHttpActionResult GetActiveByClient(int clientId)

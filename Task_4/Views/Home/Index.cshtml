@@ -26,6 +26,8 @@
     <script src="~/Scripts/app/Controllers/phoneNumbersController.js"></script>
     <script src="~/Scripts/app/Controllers/phoneNumberReservationsController.js"></script>
     <script src="~/Scripts/app/Controllers/reportsController.js"></script>
+    <script src="~/Scripts/app/Controllers/loginController.js"></script>
+    <script src="~/Scripts/app/Controllers/registerController.js"></script>
 
 </head>
 
@@ -36,20 +38,24 @@
             Management System
         </h1>
         <!-- Navigation Bar -->
-        <div class="toolbar" style="background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <div class="toolbar" ng-show="isLoggedIn" style="background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
             <div class="btn-group" role="group" style="margin-right: 20px;">
                 <button type="button" class="btn btn-primary" ng-click="navigate('/Templates/devices.html')">Devices</button>
-                <button type="button" class="btn btn-primary" ng-click="navigate('/Templates/clients.html')">Clients</button>
+                <button type="button" class="btn btn-prim
+                        ary" ng-click="navigate('/Templates/clients.html')">Clients</button>
                 <button type="button" class="btn btn-primary" ng-click="navigate('/Templates/phoneNumbers.html')">Phone Numbers</button>
                 <button type="button" class="btn btn-info" ng-click="navigate('/Templates/phoneNumberReservations.html')">Reservations History</button>
+                <!-- Reports Group -->
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportClientsPerType.html')">Clients Report</button>
+                    <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportPhoneStatus.html')">Phone Status Report</button>
+                </div>
+                <div class="pull-right">
+                    <span style="margin-right: 15px;">Welcome, <strong>{{loggedInUser}}</strong>!</span>
+                    <button class="btn btn-sm btn-danger" ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Logout</button>
+                </div>
             </div>
 
-            <!-- Reports Group -->
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportClientsPerType.html')">Clients Report</button>
-                <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportPhoneStatus.html')">Phone Status Report</button>
-            </div>
-                    <button class="btn btn-sm btn-danger" ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Logout</button>
         </div>
 
         <div ng-include="currentView"></div>
