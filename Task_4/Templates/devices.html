@@ -1,35 +1,68 @@
 ﻿<div class="container-fluid" ng-controller="devicesController" ng-init="loadDevices()">
-    <h2 style="margin-bottom: 20px;">Devices Management</h2>
 
-    <div class="form-inline" style="margin-bottom: 15px;">
-        <input type="text" class="form-control" ng-model="searchText" placeholder="Search device name..." style="width: 250px;" />
-        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
-        <button type="button" class="btn btn-success" ng-click="openModal()" ng-show="userRole === 'Admin'">Add Device</button>
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; font-weight: 600; margin-top: 0;">Devices Management</h2>
+        <p style="color: #7f8c8d;">Search, add, and manage hardware across the network.</p>
     </div>
 
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th style="width: 150px;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="d in devices">
-                <td style="vertical-align: middle;">{{d.ID}}</td>
-                <td style="vertical-align: middle;">{{d.Name}}</td>
-                <td style="width: 200px;">
-                    <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(d)" ng-show="userRole === 'Admin'">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(d.ID)" ng-show="userRole === 'Admin'">
-                            <i class="glyphicon glyphicon-trash"></i> Delete
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+
+            <div style="display: flex; align-items: center; width: 350px;">
+                <i class="glyphicon glyphicon-search" style="color: #95a5a6; margin-right: 10px;"></i>
+                <input type="text" class="form-control" ng-model="searchText" placeholder="Search device name..."
+                       style="border: none; border-bottom: 1px solid #ccc; border-radius: 0; box-shadow: none; padding-left: 0; flex-grow: 1;" />
+                <button type="button" class="btn" ng-click="search()"
+                        style="background-color: #34495e; color: white; border-radius: 4px; margin-left: 15px; padding: 6px 20px;">
+                    Search
+                </button>
+            </div>
+
+            <button type="button" class="btn" ng-click="openModal()" ng-show="userRole === 'Admin'"
+                    style="background-color: #e67e22; color: white; border-radius: 4px; font-weight: bold; padding: 6px 20px;">
+                <i class="glyphicon glyphicon-plus"></i> Add Device
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin-bottom: 0;">
+                <thead>
+                    <tr style="color: #95a5a6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">ID</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Name</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="d in devices">
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;">
+                            <strong>#{{d.ID}}</strong>
+                        </td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: 500;">
+                            {{d.Name}}
+                        </td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; width: 200px;">
+                            <div style="display: flex; flex-wrap: nowrap; gap: 8px; justify-content: center;">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="openModal(d)" ng-show="userRole === 'Admin'"
+                                        style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-edit" style="color: #f39c12;"></i> Edit
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" ng-click="delete(d.ID)" ng-show="userRole === 'Admin'"
+                                        style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-trash" style="color: #e74c3c;"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr ng-if="devices.length === 0">
+                        <td colspan="3" style="text-align: center; padding: 30px; color: #a0aec0; border-top: 1px solid #edf2f7;">
+                            No devices found.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

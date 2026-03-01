@@ -1,39 +1,67 @@
 ﻿<div class="container-fluid" ng-controller="reportsController" ng-init="loadPhoneReport()">
-    <h2 style="margin-bottom: 20px;">Phone Numbers Status Per Device</h2>
 
-    <div class="form-inline" style="margin-bottom: 15px;">
-        <label style="margin-right: 10px;">Filter by Device:</label>
-        <device-selector selected-id="filterDevice" style="margin-right: 15px;"></device-selector>
-
-        <label style="margin-right: 10px;">Filter by Status:</label>
-        <select class="form-control" ng-model="filterStatus" style="margin-right: 15px;">
-            <option value="">-- All Statuses --</option>
-            <option value="1">Reserved</option>
-            <option value="0">Unreserved</option>
-        </select>
-
-        <button type="button" class="btn btn-primary" ng-click="loadPhoneReport()">Search / Filter</button>
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; font-weight: 600; margin-top: 0;">Phone Numbers Status</h2>
+        <p style="color: #7f8c8d;">Overview of reserved and unreserved phone numbers allocated per device.</p>
     </div>
 
-    <table class="table table-bordered table-striped table-hover" style="max-width: 800px;">
-        <thead>
-            <tr>
-                <th>Device</th>
-                <th>Phone Numbers Status</th>
-                <th># of Phone Numbers</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="p in phoneReport">
-                <td style="vertical-align: middle;">{{ p.Device }}</td>
-                <td style="vertical-align: middle;">
-                    <!-- Added a nice visual badge depending on the status -->
-                    <span ng-class="{'label label-success': p.Status === 'Reserved', 'label label-default': p.Status === 'Unreserved'}">
-                        {{ p.Status }}
-                    </span>
-                </td>
-                <td style="vertical-align: middle; font-weight: bold;">{{ p.NoOfPhoneNumbers }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: center; flex-wrap: wrap;">
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="glyphicon glyphicon-filter" style="color: #95a5a6;"></i>
+                <label style="color: #7f8c8d; font-weight: normal; margin: 0;">Filter by Device:</label>
+            </div>
+            <device-selector selected-id="filterDevice" style="min-width: 200px;"></device-selector>
+
+            <label style="color: #7f8c8d; font-weight: normal; margin: 0; margin-left: 10px;">Status:</label>
+            <select class="form-control" ng-model="filterStatus" style="border: none; border-bottom: 1px solid #ccc; border-radius: 0; box-shadow: none; min-width: 180px;">
+                <option value="">-- All Statuses --</option>
+                <option value="1">Reserved</option>
+                <option value="0">Unreserved</option>
+            </select>
+
+            <button type="button" class="btn" ng-click="loadPhoneReport()"
+                    style="background-color: #34495e; color: white; border-radius: 4px; padding: 6px 20px;">
+                Search / Filter
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin-bottom: 0;">
+                <thead>
+                    <tr style="color: #95a5a6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Device</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Phone Numbers Status</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;"># of Phone Numbers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="p in phoneReport">
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: 500;">
+                            {{ p.Device }}
+                        </td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7;">
+
+                            <span ng-if="p.Status === 'Reserved'" style="background-color: #e6fffa; color: #2c7a7b; padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; border: 1px solid #b2f5ea; display: inline-block;">
+                                Reserved
+                            </span>
+
+                            <span ng-if="p.Status === 'Unreserved'" style="background-color: #f7fafc; color: #718096; padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; border: 1px solid #e2e8f0; display: inline-block;">
+                                Unreserved
+                            </span>
+
+                        </td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: bold; font-size: 16px;">
+                            {{ p.NoOfPhoneNumbers }}
+                        </td>
+                    </tr>
+                    <tr ng-if="phoneReport.length === 0">
+                        <td colspan="3" style="text-align: center; padding: 30px; color: #a0aec0; border-top: 1px solid #edf2f7;">No report data available.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

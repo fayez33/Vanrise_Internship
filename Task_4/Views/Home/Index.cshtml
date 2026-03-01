@@ -29,38 +29,286 @@
     <script src="~/Scripts/app/Controllers/loginController.js"></script>
     <script src="~/Scripts/app/Controllers/registerController.js"></script>
 
+    <style>
+        /* General Body Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR & LAYOUT --- */
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            width: 80px;
+            background-color: #1e2530; /* Dark Navy from the image */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            color: #e67e22;
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-item {
+            color: #8aa4af;
+            font-size: 22px;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: 0.3s;
+        }
+            /* Hover effect: Orange left border and white icon */
+            .sidebar-item:hover {
+                color: white;
+                border-left: 3px solid #e67e22;
+                background-color: #2b3643;
+            }
+
+        /* --- TOP BAR --- */
+        .main-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .topbar {
+            background-color: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 50;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: #f4f7fa;
+        }
+
+        /* --- LOGIN PAGE --- */
+
+        .login-bg {
+            /* Change the URL path if you saved it in a different folder! */
+            background: url('/Content/login-bg.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .login-logo img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* Material Design Inputs (Bottom border only) */
+        .material-input {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0;
+            box-shadow: none;
+            padding-left: 0;
+            font-size: 14px;
+        }
+
+            .material-input:focus {
+                border-bottom: 2px solid #e67e22;
+                box-shadow: none;
+                outline: none;
+            }
+
+        .login-btn {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 30px;
+            transition: background 0.3s;
+        }
+
+            .login-btn:hover {
+                background-color: #2c3e50;
+                color: white;
+            }
+        /* --- CUSTOM LOGO STYLES --- */
+
+        /* Style for Login/Register: Gradient See-Through Effect */
+        .logo-gradient-mask {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px auto; /* Center horizontally */
+            /* Define the orange-to-blue gradient background */
+            background: linear-gradient(135deg, #2980b9 0%, #d35400 90%, #f39c12 100%);
+            
+            /* Use the external SVG file to mask (cut out) the shape */
+            -webkit-mask-image: url('/Content/logo.svg');
+            mask-image: url('/Content/logo.svg');
+            /* Ensure the mask fits perfectly */
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+
+        .sidebar-logo-img {
+            width: 50px; /* Adjust this to make it fit perfectly in your 80px sidebar */
+            margin-top: 15px;
+            margin-bottom: 25px;
+            /* This specific combination turns a black SVG into the orange color #e67e22 */
+            filter: invert(54%) sepia(61%) saturate(1765%) hue-rotate(346deg) brightness(95%) contrast(94%);
+        }
+        /* --- MODERN MODALS --- */
+        /* Smooth, rounded card style for the modal popup */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        /* Clean header area */
+        .modal-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #edf2f7;
+            border-radius: 12px 12px 0 0;
+            padding: 20px 25px;
+        }
+
+        .modal-title {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+            /* Material-Design Inputs specifically for forms inside modals */
+            .modal-body .form-control {
+                border: none;
+                border-bottom: 1px solid #ccc;
+                border-radius: 0;
+                box-shadow: none;
+                padding-left: 0;
+                background-color: transparent;
+                font-size: 14px;
+            }
+
+                .modal-body .form-control:focus {
+                    border-bottom: 2px solid #e67e22; /* Highlights orange on focus */
+                    box-shadow: none;
+                    outline: none;
+                }
+
+            .modal-body label {
+                color: #7f8c8d;
+                font-weight: normal;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+        /* Clean footer area */
+        .modal-footer {
+            border-top: 1px solid #edf2f7;
+            padding: 15px 25px;
+            background-color: #fcfcfc;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Premium deep-navy backdrop overlay instead of standard grey */
+        .modal-backdrop.in {
+            opacity: 0.7;
+            background-color: #1e2530;
+        }
+    </style>
+
 </head>
 
-<body ng-controller="mainController">
+<body ng-app="internshipApp" ng-controller="mainController">
 
-    <div style="padding: 20px;">
-        <h1 style="color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px;">
-            Management System
-        </h1>
-        <!-- Navigation Bar -->
-        <div class="toolbar" ng-show="isLoggedIn" style="background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-            <div class="btn-group" role="group" style="margin-right: 20px;">
-                <button type="button" class="btn btn-primary" ng-click="navigate('/Templates/devices.html')">Devices</button>
-                <button type="button" class="btn btn-prim
-                        ary" ng-click="navigate('/Templates/clients.html')">Clients</button>
-                <button type="button" class="btn btn-primary" ng-click="navigate('/Templates/phoneNumbers.html')">Phone Numbers</button>
-                <button type="button" class="btn btn-info" ng-click="navigate('/Templates/phoneNumberReservations.html')">Reservations History</button>
-                <!-- Reports Group -->
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportClientsPerType.html')">Clients Report</button>
-                    <button type="button" class="btn btn-success" ng-click="navigate('/Templates/reportPhoneStatus.html')">Phone Status Report</button>
-                </div>
-                <div class="pull-right">
-                    <span style="margin-right: 15px;">Welcome, <strong>{{loggedInUser}}</strong>!</span>
-                    <button class="btn btn-sm btn-danger" ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Logout</button>
+    <div class="app-wrapper">
+
+        <div class="sidebar" ng-show="isLoggedIn">
+            <div class="sidebar-brand">
+                <img src="~/Content/logo.svg" class="sidebar-logo-img" alt="System Logo"/>
+            </div>
+            <div class="sidebar-item" ng-click="navigate('/Templates/devices.html')" title="Devices">
+                <i class="glyphicon glyphicon-hdd"></i>
+            </div>
+            <div class="sidebar-item" ng-click="navigate('/Templates/clients.html')" title="Clients">
+                <i class="glyphicon glyphicon-user"></i>
+            </div>
+            <div class="sidebar-item" ng-click="navigate('/Templates/phoneNumbers.html')" title="Phone Numbers">
+                <i class="glyphicon glyphicon-phone"></i>
+            </div>
+            <div class="sidebar-item" ng-click="navigate('/Templates/phoneNumberReservations.html')" title="Reservations">
+                <i class="glyphicon glyphicon-list-alt"></i>
+            </div>
+            <div class="sidebar-item" ng-click="navigate('/Templates/reportClientsPerType.html')" title="Reports">
+                <i class="glyphicon glyphicon-stats"></i>
+            </div>
+        </div>
+
+        <div class="main-panel">
+
+            <div class="topbar" ng-show="isLoggedIn" style="justify-content: flex-end;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+
+                    <div style="color: #333; font-size: 16px; display: flex; align-items: center;">
+                        <i class="glyphicon glyphicon-user" style="color: #e67e22; margin-right: 10px; font-size: 20px;"></i>
+                        <span>Welcome, <strong>{{loggedInUser}}</strong></span>
+                    </div>
+
+                    <button class="btn btn-sm btn-link" ng-click="logout()" style="color: #d9534f; text-decoration: none; font-weight: bold;">
+                        Logout
+                    </button>
                 </div>
             </div>
 
+            <div class="content-area" ng-style="{'padding': isLoggedIn ? '30px' : '0'}">
+                <ng-include src="currentView"></ng-include>
+            </div>
+
         </div>
-
-        <div ng-include="currentView"></div>
     </div>
-
 </body>
 
 </html>

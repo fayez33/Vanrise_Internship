@@ -1,48 +1,74 @@
 ﻿<div class="container-fluid" ng-controller="clientsController" ng-init="loadClients()">
-    <h2 style="margin-bottom: 20px;">Clients Management</h2>
 
-    <div class="form-inline" style="margin-bottom: 15px;">
-        <input type="text" class="form-control" ng-model="searchName" placeholder="Search by name..." style="width: 200px;" />
-
-        <client-type-selector selected-type="searchType" style="margin-left: 10px; margin-right: 10px;"></client-type-selector>
-
-        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
-        <button type="button" class="btn btn-success" ng-click="openModal()" ng-show="userRole === 'Admin'">Add Client</button>
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; font-weight: 600; margin-top: 0;">Clients Management</h2>
+        <p style="color: #7f8c8d;">Search, add, and manage individuals and organizations.</p>
     </div>
 
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Birth Date</th>
-                <th style="width: 320px; text-align: center;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="c in clients">
-                <td style="vertical-align: middle;">{{c.ID}}</td>
-                <td style="vertical-align: middle;">{{c.Name}}</td>
-                <td style="vertical-align: middle;">{{ c.Type === 0 ? 'Individual' : 'Organization' }}</td>
-                <td style="vertical-align: middle;">{{ c.BirthDate ? (c.BirthDate | date:'yyyy-MM-dd') : 'N/A' }}</td>
-                <td style="width: 380px;">
-                    <div style="display: flex; flex-wrap: nowrap; gap: 5px; justify-content: center;">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="openModal(c)" ng-show="userRole === 'Admin'">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </button>
-                        <button type="button" class="btn btn-info btn-sm" ng-click="openReserveModal(c)">
-                            <i class="glyphicon glyphicon-phone"></i> Reserve
-                        </button>
-                        <button type="button" class="btn btn-default btn-sm" ng-click="openUnreserveModal(c)">
-                            <i class="glyphicon glyphicon-ban-circle"></i> Unreserve
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="delete(c.ID)" ng-show="userRole === 'Admin'">
-                            <i class="glyphicon glyphicon-trash"></i> Delete
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+
+            <div style="display: flex; align-items: center; gap: 15px; flex-grow: 1; max-width: 600px;">
+                <div style="display: flex; align-items: center; flex-grow: 1;">
+                    <i class="glyphicon glyphicon-search" style="color: #95a5a6; margin-right: 10px;"></i>
+                    <input type="text" class="form-control" ng-model="searchName" placeholder="Search by name..."
+                           style="border: none; border-bottom: 1px solid #ccc; border-radius: 0; box-shadow: none; padding-left: 0; flex-grow: 1;" />
+                </div>
+
+                <client-type-selector selected-type="searchType" style="min-width: 150px;"></client-type-selector>
+
+                <button type="button" class="btn" ng-click="search()"
+                        style="background-color: #34495e; color: white; border-radius: 4px; padding: 6px 20px;">
+                    Search
+                </button>
+            </div>
+
+            <button type="button" class="btn" ng-click="openModal()" ng-show="userRole === 'Admin'"
+                    style="background-color: #e67e22; color: white; border-radius: 4px; font-weight: bold; padding: 6px 20px;">
+                <i class="glyphicon glyphicon-plus"></i> Add Client
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin-bottom: 0;">
+                <thead>
+                    <tr style="color: #95a5a6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">ID</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Name</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Type</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Birth Date</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="c in clients">
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;"><strong>#{{c.ID}}</strong></td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: 500;">{{c.Name}}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;">{{ c.Type === 0 ? 'Individual' : 'Organization' }}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;">{{ c.BirthDate ? (c.BirthDate | date:'yyyy-MM-dd') : 'N/A' }}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; width: 380px;">
+                            <div style="display: flex; flex-wrap: nowrap; gap: 8px; justify-content: center;">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="openModal(c)" ng-show="userRole === 'Admin'" style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-edit" style="color: #f39c12;"></i> Edit
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" ng-click="openReserveModal(c)" style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-phone" style="color: #3498db;"></i> Reserve
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" ng-click="openUnreserveModal(c)" style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-ban-circle" style="color: #7f8c8d;"></i> Unreserve
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" ng-click="delete(c.ID)" ng-show="userRole === 'Admin'" style="border-color: #cbd5e0; color: #4a5568; background: transparent;">
+                                    <i class="glyphicon glyphicon-trash" style="color: #e74c3c;"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-if="clients.length === 0">
+                        <td colspan="5" style="text-align: center; padding: 30px; color: #a0aec0; border-top: 1px solid #edf2f7;">No clients found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

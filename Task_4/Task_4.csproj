@@ -225,6 +225,8 @@
     <Compile Include="Models\Requests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Content Include="Content\login-bg.jpeg" />
+    <Content Include="Content\logo.svg" />
     <Content Include="Scripts\app\controllers\loginController.js" />
     <Content Include="Scripts\app\controllers\phoneNumberReservationsController.js" />
     <Content Include="Scripts\app\controllers\registerController.js" />

@@ -1,29 +1,50 @@
 ﻿<div class="container-fluid" ng-controller="reportsController" ng-init="loadClientsReport()">
-    <h2 style="margin-bottom: 20px;">Clients Per Type Report</h2>
 
-    <div class="form-inline" style="margin-bottom: 15px;">
-        <label style="margin-right: 10px;">Filter by Type:</label>
-        <!-- Reusing your custom directive -->
-        <client-type-selector selected-type="filterType" style="margin-right: 10px;"></client-type-selector>
-
-        <button type="button" class="btn btn-primary" ng-click="loadClientsReport()">Search / Filter</button>
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; font-weight: 600; margin-top: 0;">Clients Per Type</h2>
+        <p style="color: #7f8c8d;">Aggregate view of clients categorized by their entity type.</p>
     </div>
 
-    <table class="table table-bordered table-striped table-hover" style="max-width: 600px;">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>No of Clients</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="r in clientsReport">
-                <!-- Check if 0 or 1 to print the Enum text properly -->
-                <td style="vertical-align: middle; font-weight: bold;">
-                    {{ r.Type === 0 ? 'Individual' : 'Organization' }}
-                </td>
-                <td style="vertical-align: middle;">{{ r.NoOfClients }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 800px;">
+
+        <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="glyphicon glyphicon-filter" style="color: #95a5a6;"></i>
+                <label style="color: #7f8c8d; font-weight: normal; margin: 0;">Filter by Type:</label>
+            </div>
+
+            <client-type-selector selected-type="filterType" style="min-width: 200px;"></client-type-selector>
+
+            <button type="button" class="btn" ng-click="loadClientsReport()"
+                    style="background-color: #34495e; color: white; border-radius: 4px; padding: 6px 20px;">
+                Search / Filter
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin-bottom: 0;">
+                <thead>
+                    <tr style="color: #95a5a6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Type</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">No of Clients</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="r in clientsReport">
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: 500;">
+                            <i class="glyphicon glyphicon-user" ng-if="r.Type === 0" style="color: #3498db; margin-right: 8px;"></i>
+                            <i class="glyphicon glyphicon-briefcase" ng-if="r.Type !== 0" style="color: #e67e22; margin-right: 8px;"></i>
+                            {{ r.Type === 0 ? 'Individual' : 'Organization' }}
+                        </td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: bold; font-size: 16px;">
+                            {{ r.NoOfClients }}
+                        </td>
+                    </tr>
+                    <tr ng-if="clientsReport.length === 0">
+                        <td colspan="2" style="text-align: center; padding: 30px; color: #a0aec0; border-top: 1px solid #edf2f7;">No data available.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

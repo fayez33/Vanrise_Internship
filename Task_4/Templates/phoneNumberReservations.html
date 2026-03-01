@@ -1,34 +1,53 @@
 ﻿<div class="container-fluid" ng-controller="phoneNumberReservationsController" ng-init="loadReservations()">
-    <h2 style="margin-bottom: 20px;">Phone Number Reservations History</h2>
 
-    <div class="form-inline" style="margin-bottom: 15px;">
-        <client-selector selected-id="searchClient" style="margin-right: 10px;"></client-selector>
-        <phone-number-selector selected-id="searchPhone" style="margin-right: 10px;"></phone-number-selector>
-
-        <button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; font-weight: 600; margin-top: 0;">Reservations History</h2>
+        <p style="color: #7f8c8d;">Track historical and active phone number assignments.</p>
     </div>
 
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Reservation ID</th>
-                <th>Client Name</th>
-                <th>Phone Number</th>
-                <th>Begin Effective Date (BED)</th>
-                <th>End Effective Date (EED)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="r in reservations">
-                <td style="vertical-align: middle;">{{r.ID}}</td>
-                <td style="vertical-align: middle;">{{r.ClientName}}</td>
-                <td style="vertical-align: middle;">{{r.PhoneNumber}}</td>
-                <td style="vertical-align: middle;">{{r.BED | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                <td style="vertical-align: middle;">
-                    <span ng-if="r.EED">{{r.EED | date:'yyyy-MM-dd HH:mm:ss'}}</span>
-                    <span ng-if="!r.EED" class="label label-success">Active (No End Date)</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+
+            <client-selector selected-id="searchClient" style="min-width: 200px;"></client-selector>
+            <phone-number-selector selected-id="searchPhone" style="min-width: 200px;"></phone-number-selector>
+
+            <button type="button" class="btn" ng-click="search()"
+                    style="background-color: #34495e; color: white; border-radius: 4px; padding: 6px 20px;">
+                Search
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin-bottom: 0;">
+                <thead>
+                    <tr style="color: #95a5a6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Res ID</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Client Name</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Phone Number</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">Begin Date (BED)</th>
+                        <th style="border-bottom: 2px solid #edf2f7; padding: 15px 10px;">End Date (EED)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="r in reservations">
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;"><strong>#{{r.ID}}</strong></td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50; font-weight: 500;">{{r.ClientName}}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #2c3e50;">{{r.PhoneNumber}}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7; color: #7f8c8d;">{{r.BED | date:'yyyy-MM-dd'}}</td>
+                        <td style="vertical-align: middle; padding: 15px 10px; border-top: 1px solid #edf2f7;">
+                            <span ng-if="r.EED" style="color: #7f8c8d;">{{r.EED | date:'yyyy-MM-dd'}}</span>
+
+                            <span ng-if="!r.EED" style="background-color: #e6fffa; color: #2c7a7b; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; border: 1px solid #b2f5ea;">
+                                Active
+                            </span>
+                        </td>
+                    </tr>
+                    <tr ng-if="reservations.length === 0">
+                        <td colspan="5" style="text-align: center; padding: 30px; color: #a0aec0; border-top: 1px solid #edf2f7;">No reservations found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
