@@ -4,8 +4,6 @@
 This project is a web-based Device Management System developed as part of my internship at Vanrise. It is designed to securely track and manage equipment. The application features a responsive frontend, user authentication, and a robust C# backend integrated with a SQL Server database for persistent data storage.
 
 ## Features
-## Features
-## Features
 - **Secure User Authentication:** A dedicated login portal that restricts system access to authorized personnel only.
 - **Device Management Dashboard:** A comprehensive, interactive pages to oversee and track all equipment.
 - **Full CRUD Functionality:** The ability to seamlessly add new devices, view current inventory details, update statuses, and remove obsolete records.
@@ -48,4 +46,4 @@ You can use the following default credentials for initial testing:
 - **Password:** `Password123`
 
 ## Acknowledgments
-- Developed as an internship project at **Vanrise**.
+- Currently Developing as an internship project at **Vanrise**.
