@@ -29,7 +29,7 @@ Before you begin, ensure you have the following installed:
 
 #### 1. Database Setup
 1. Open SSMS and connect to your local SQL Server instance.
-2. Navigate to the folder containing the database files in this repository.
+2. Open the database file in this repository.
 3. Open and execute the SQL script to generate the necessary database, tables, and any initial seed data.
 
 #### 2. Application Setup
